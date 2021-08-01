@@ -1,0 +1,16 @@
+# export UID=`id -u`; export GID=`id -g`; docker-compose up -d dev
+
+version: "3.3"
+
+services:
+
+  dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ubuntu20_gfortran10
+    tty: True
+    user: $UID:$GID:$USER
+    volumes:
+      - $MYREPOS/Mohid:/source/Mohid
+    working_dir: /source/Mohid/
+
