@@ -7,10 +7,11 @@ services:
   dev:
     build:
       context: .
-      dockerfile: docker/Dockerfile.ubuntu20_gfortran10
+      dockerfile: Dockerfile
     tty: True
     user: $UID:$GID:$USER
     volumes:
       - $MYREPOS/Mohid:/source/Mohid
+      - $MYREPOS/docker-mohid:/tmp/tests
     working_dir: /source/Mohid/
 

@@ -1,5 +1,3 @@
-
-
 # -w -fallow-argument-mismatch -O2
 #-w suppresses all warnings.  It is the only way (intentionally!) to
 #suppress the argument mismatch warning.
@@ -25,13 +23,19 @@ netcdf: test_netcdf.f90
     -lnetcdff -lnetcdf \
     -lcurl -lhdf5_hl -lhdf5 -lm -ldl -lz
 
-fproj: test_proj4.f90
-    rm -rf test_proj4.exe test_proj4.o
-    gfortran \
-    test_proj4.f90 -o test_proj4.exe \
+fproj: test_fproj.f90
+	rm -rf test_fproj.exe test_fproj.o
+	gfortran \
+    test_fproj.f90 -o test_fproj.exe \
     -I/usr/local/include \
     /usr/local/lib/libfproj.a -lproj
 
+fproj2: test_fproj2.f90
+	rm -rf test_fproj2.exe test_fproj2.o
+	gfortran \
+    test_fproj2.f90 -o test_fproj2.exe \
+    -I/usr/local/include \
+    /usr/local/lib/libfproj.a -lproj
 
 
 # #     /usr/local/lib/libnetcdff.a \
