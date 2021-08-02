@@ -64,16 +64,27 @@ RUN echo "Installing netcdf-fortran..." &&\
     make install &&\
     nc-config --all
 
-# RUN echo "Installing fortran-proj..." &&\
-#     cd /tmp/libs &&\
-#     tar -zxf fortran-proj-v1.0.1.tar.gz &&\
-#     cd fortran-proj-v1.0.1 &&\
-#     sed -i 's/SHARED/STATIC/g' CMakeLists.txt &&\
-#     sed -i 's/shared/static/g' CMakeLists.txt &&\
-#     mkdir build && cd build &&\
-#     cmake .. &&\
-#     make  &&\
-#     make install
+
+
+RUN echo "Installing proj..." &&\
+    cd /tmp/libs &&\
+    tar -zxf proj-8.1.0.tar.gz &&\
+    cd proj-8.1.0 &&\
+    ./configure --enable-static --disable-shared --disable-tiff --without-mutex --with-curl=/usr/local &&\
+    make &&\
+    make install
+
+
+RUN echo "Installing fortran-proj..." &&\
+    cd /tmp/libs &&\
+    tar -zxf fortran-proj-v1.0.1.tar.gz &&\
+    cd fortran-proj-v1.0.1 &&\
+    sed -i 's/SHARED/STATIC/g' CMakeLists.txt &&\
+    sed -i 's/shared/static/g' CMakeLists.txt &&\
+    mkdir build && cd build &&\
+    cmake .. &&\
+    make  &&\
+    make install
 
 
 # ARG GIT_TOKEN=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
