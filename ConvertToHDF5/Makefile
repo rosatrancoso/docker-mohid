@@ -232,4 +232,4 @@ install:
 clean:
 	-rm -f build/*.o
 	-rm -f include/*.mod
-	-rm -f bin/*.exe
+	-rm -f bin/ConvertToHDF5.exe

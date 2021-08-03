@@ -1,6 +1,6 @@
 FC = gfortran
 
-CCFLAGS         = -w -fallow-argument-mismatch -O2 -static \
+CCFLAGS         = -w -fallow-argument-mismatch -O2 \
                   -fconvert=little-endian -ffree-line-length-none \
                   -D_LAGRANGIAN_GLOBAL_ -D_USE_NIX -D_STACK_LIMITS_ -D_USE_PROJ4
 
@@ -8,11 +8,21 @@ OBJ_CCFLAGS     = $(CCFLAGS) -I/usr/local/include -I./include
 
 MODOUT          = -J
 
-LIBS            = \
+
+LIBS_STATIC            = \
                     -L/usr/local/lib \
                     -lfproj -lproj \
                     -lnetcdff -lnetcdf \
-                    /usr/local/lib/libcurl.a \
-                    -lhdf5_hl -lhdf5 -lm -ldl -lz
+                    /usr/local/lib/libhdf5hl_fortran.a \
+                    /usr/local/lib/libhdf5_hl.a \
+                    /usr/local/lib/libhdf5_fortran.a \
+                    /usr/local/lib/libhdf5.a \
+                    -lm -ldl -lz \
+                    -lstdc++ -ltiff -ltiffxx -lsqlite3 \
+                    -lpthread -lcurl -ljbig -ljpeg -llzma -lwebp -lzstd
 
-
+LIBS =  -L/usr/local/lib \
+        -lfproj -lproj \
+        -lnetcdff -lnetcdf \
+        -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 \
+        -lz -ldl -lm -Wl,-rpath -Wl,/usr/local/lib

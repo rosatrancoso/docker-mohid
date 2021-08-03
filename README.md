@@ -1,41 +1,44 @@
 # docker-mohid
 
-How to compile the model and save the executable outside of docker?
+## Experimenting with lib compilation
 
-1. Compile libs statically in image mohid-build
+1. Dockefile.system
 
-    docker build -t mohid-build .
+Using system libraries
 
-2. Test if libs are ok
+gfortran10 is less flexible:
 
-    docker run -ti --rm -u $UID:$GID:$USER \
-    -v $MYREPOS/docker-mohid/tests:/tmp/tests \
-    mohid-build bash
+```
+Error: Type mismatch in argument 'hdferr' at (1); passed INTEGER(8) to INTEGER(4)
+```
 
+Need to compile hdf5 and netcdf with:
 
-    cd /tmp/tests
-    make hdf5
-    ./test_hdf5.exe
-    make netcdf
-    ./test_netcdf.exe
-    make fproj
-    ./test_fproj.exe
-    make fproj2
-    ./test_fproj2.exe
+```
+ENV FCFLAGS="-w -fallow-argument-mismatch -O2" FFLAGS="-w -fallow-argument-mismatch -O2"
+```
 
 
-3. Run image mohid-build with Mohid code mounted on /source/Mohid
+2. Dockerfile.static0 - WORKED!
 
-    docker run -ti -d --name mohid-build_1 \
-    -u $UID:$GID:$USER \
-    -v $MYREPOS/Mohid:/tmp/Mohid \
-    -v $MYREPOS/docker-mohid:/tmp/docker-mohid \
-    mohid-build
+Trying to statically compile all libraries
+Didn't work, lots of broken ``libcurl.a` dependencies.
 
-    docker exec -ti mohid-build_1 bash
 
-    cd /tmp/docker-mohid/
-    cd ConvertToHDF5
+3. Dockerfile.static1
+
+Statically compile only the specific libraries :
+    - hdf5, netcdf-c and netcdf-fortran with `-w -fallow-argument-mismatch -O2`
+    - fproj that is not build anywhere
+
+
+4. Dockerfile.dynamic - WORKED!
+
+All libraries compiled shared.
+
+## Linking Mohid code to the right place
+
+    cd /tmp/docker-mohid/ConvertToHDF5
     ln -s Makefile.inc.gfortran Makefile.inc
     mkdir build include src
     cd src
@@ -45,10 +48,6 @@ How to compile the model and save the executable outside of docker?
     ln -s ../../../Mohid/Software/ConvertToHDF5/*F90 .
     cd ../
     make
-
-
-
-
 
 
 ## To do
