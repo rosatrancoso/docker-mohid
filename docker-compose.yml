@@ -4,13 +4,50 @@ version: "3.3"
 
 services:
 
-  dev:
+  # using system libraries
+  system:
     build:
       context: .
-      dockerfile: docker/Dockerfile.ubuntu20_gfortran10
+      dockerfile: Dockerfile.system
     tty: True
     user: $UID:$GID:$USER
     volumes:
-      - $MYREPOS/Mohid:/source/Mohid
-    working_dir: /source/Mohid/
+      - $MYREPOS/Mohid:/tmp/Mohid
+      - $MYREPOS/docker-mohid:/tmp/docker-mohid
+
+  # trying to statically compile the  libraries
+  # didn't work, lots of broken libcurl.a stuff
+  static0:
+    build:
+      context: .
+      dockerfile: Dockerfile.static0
+    tty: True
+    user: $UID:$GID:$USER
+    volumes:
+      - $MYREPOS/Mohid:/tmp/Mohid
+      - $MYREPOS/docker-mohid:/tmp/docker-mohid
+
+  # statically compile only the specific libraries (hdf5, netcdf, fproj)
+  # that need recompiling with -w -fallow-argument-mismatch -O2
+  static1:
+    build:
+      context: .
+      dockerfile: Dockerfile.static1
+    tty: True
+    user: $UID:$GID:$USER
+    volumes:
+      - $MYREPOS/Mohid:/tmp/Mohid
+      - $MYREPOS/docker-mohid:/tmp/docker-mohid
+
+  # dynamic compile everything
+
+  dynamic:
+    build:
+      context: .
+      dockerfile: Dockerfile.dynamic
+    tty: True
+    user: $UID:$GID:$USER
+    volumes:
+      - $MYREPOS/Mohid:/tmp/Mohid
+      - $MYREPOS/docker-mohid:/tmp/docker-mohid
 

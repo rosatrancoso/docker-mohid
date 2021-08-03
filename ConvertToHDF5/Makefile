@@ -3,17 +3,17 @@ include ./Makefile.inc
 
 AR = ar rcs
 
-FPP_DEFINES     = -D_LAGRANGIAN_GLOBAL_ -D_USE_NIX -D_STACK_LIMITS_ -D_USE_PROJ4
-
-CCFLAGS         = ${WARNINGS_FLAGS} ${DEBUG_FLAGS} ${LANG_FLAGS} ${OPT_FLAGS} ${OTH_FLAGS} ${FPP_DEFINES}
-OBJ_CCFLAGS     = $(CCFLAGS) -I$(INC_HDF5) -I$(INC_NETCDF) -I$(INC_PROJ4) -I$(INC_PROJ4F) -Iinclude
-
 OBJ             =   build/ModuleGlobalData.o \
                     build/ModuleTime.o \
                     build/ModuleEnterData.o \
                     build/ModuleStopWatch.o \
-                    build/proj4.o \
                     build/ModuleFunctions.o \
+                    build/ModuleDrawing.o \
+                    build/ModuleHDF5.o \
+                    build/ModuleTriangulation.o \
+                    build/ModuleTimeSerie.o \
+                    build/ModuleTask2000.o \
+                    build/ModuleDischarges.o \
                     build/ModuleHorizontalGrid.o \
                     build/ModuleGridData.o  \
                     build/ModuleHorizontalMap.o \
@@ -21,9 +21,9 @@ OBJ             =   build/ModuleGlobalData.o \
                     build/ModuleMap.o \
                     build/ModuleNETCDF.o \
                     build/ModuleInterpolation.o \
-                    build/ModuleBoxDif.o \
                     build/ModuleTwoWay.o \
                     build/ModuleField4D.o \
+                    build/ModuleBoxDif.o \
                     build/ModuleFillMatrix.o \
                     build/ModuleMM5Format.o \
                     build/ModuleEUCenterFormat.o \
@@ -46,6 +46,15 @@ OBJ             =   build/ModuleGlobalData.o \
                     build/ModuleWOAFormat.o \
                     build/ModuleInterpolateGrids.o \
                     build/ModuleInterpolateTime.o \
+                    build/ModuleGlueHDF5Files.o \
+                    build/ModulePatchHDF5Files.o \
+                    build/ncdflib.o \
+                    build/ModuleCFFormat.o \
+                    build/ModuleCFPolcomFormat.o \
+                    build/ModuleAladinFormat.o \
+                    build/ModuleMOG2DFormat.o \
+                    build/ModuleIHRadarFormat.o \
+                    build/ModuleDelft3D_2_Mohid.o \
 
 .PHONY: clean all
 
@@ -66,12 +75,29 @@ build/ModuleEnterData.o: src/ModuleEnterData.F90
 build/ModuleStopWatch.o: src/ModuleStopWatch.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
-build/proj4.o: src/proj4.F90
-	${FC} -c $? ${OBJ_CCFLAGS} -o $@ ${MODOUT}include
-
 build/ModuleFunctions.o: src/ModuleFunctions.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
+build/ModuleDrawing.o: src/ModuleDrawing.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleHDF5.o: src/ModuleHDF5.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleTriangulation.o: src/ModuleTriangulation.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleTimeSerie.o: src/ModuleTimeSerie.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleTask2000.o: src/ModuleTask2000.F
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleDischarges.o: src/ModuleDischarges.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+
+# --- Base 2 --- #
 
 build/ModuleHorizontalGrid.o: src/ModuleHorizontalGrid.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
@@ -97,10 +123,10 @@ build/ModuleInterpolation.o: src/ModuleInterpolation.F90
 build/ModuleBoxDif.o: src/ModuleBoxDif.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
-build/ModuleField4D.o: src/ModuleField4D.F90
+build/ModuleTwoWay.o: src/ModuleTwoWay.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
-build/ModuleTwoWay.o: src/ModuleTwoWay.F90
+build/ModuleField4D.o: src/ModuleField4D.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
 build/ModuleFillMatrix.o: src/ModuleFillMatrix.F90
@@ -172,10 +198,38 @@ build/ModuleInterpolateGrids.o: src/ModuleInterpolateGrids.F90
 build/ModuleInterpolateTime.o: src/ModuleInterpolateTime.F90
 	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
 
+build/ModuleGlueHDF5Files.o: src/ModuleGlueHDF5Files.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModulePatchHDF5Files.o: src/ModulePatchHDF5Files.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ncdflib.o: src/ncdflib.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleCFFormat.o: src/ModuleCFFormat.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleCFPolcomFormat.o: src/ModuleCFPolcomFormat.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleAladinFormat.o: src/ModuleAladinFormat.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleMOG2DFormat.o: src/ModuleMOG2DFormat.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleIHRadarFormat.o: src/ModuleIHRadarFormat.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+build/ModuleDelft3D_2_Mohid.o: src/ModuleDelft3D_2_Mohid.F90
+	${FC} -c $? ${OBJ_CCFLAGS} ${LIBS} -o $@ ${MODOUT}include
+
+
 install:
 	ln -sf ../src/ConvertToHDF5/bin/ConvertToHDF5.exe ../../bin/ConvertToHDF5.exe
 
 clean:
 	-rm -f build/*.o
 	-rm -f include/*.mod
-	-rm -f bin/*.exe
+	-rm -f bin/ConvertToHDF5.exe
