@@ -79,10 +79,3 @@ RUN echo "Installing fortran-proj..." &&\
     make  &&\
     make install
 
-# ARG GIT_TOKEN=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
-# ARG GIT_LFS_SKIP_SMUDGE=1
-
-# RUN echo '----- Compiling Mohid ----- ' &&\
-#     mkdir /source && cd /source/ &&\
-#     git clone https://$GIT_TOKEN@github.com/rosatrancoso/Mohid.git &&\
-#     cd /source/Mohid
