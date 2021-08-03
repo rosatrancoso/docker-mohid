@@ -2,7 +2,7 @@
 
 ## Experimenting with lib compilation
 
-1. Dockefile.system
+### Dockefile.system
 
 Using system libraries
 
@@ -19,22 +19,23 @@ ENV FCFLAGS="-w -fallow-argument-mismatch -O2" FFLAGS="-w -fallow-argument-misma
 ```
 
 
-2. Dockerfile.static0 - WORKED!
+### Dockerfile.static0
 
 Trying to statically compile all libraries
-Didn't work, lots of broken ``libcurl.a` dependencies.
+Didn't work, lots of broken `libcurl.a` dependencies.
 
 
-3. Dockerfile.static1
+### Dockerfile.static1 - WORKED!
 
 Statically compile only the specific libraries :
     - hdf5, netcdf-c and netcdf-fortran with `-w -fallow-argument-mismatch -O2`
     - fproj that is not build anywhere
 
 
-4. Dockerfile.dynamic - WORKED!
+### Dockerfile.dynamic - WORKED!
 
 All libraries compiled shared.
+
 
 ## Linking Mohid code to the right place
 
