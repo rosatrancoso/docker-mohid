@@ -1,14 +1,24 @@
 <begin_file>
 ACTION: CONVERT WRF FORMAT
-FILENAME: small.nc
+FILENAME: m12_wrfout_d01.2021-06-28_18_00_00
 OUTPUT_GRID_FILENAME: wrf_grid.dat
-OUTPUTFILENAME: small.hdf5
+OUTPUTFILENAME: m12_wrfout_d01.2021-06-28_18_00_00.hdf5
 WRITE_TERRAIN: 1
 WRITE_HEADERS: 1
 WRITE_LANDUSE: 1
 COMPUTE_WINDSTRESS: 1
 COMPUTE_RELATIVE_HUMIDITY: 1
 COMPUTE_PRECIPITATION: 1
+COMPUTE_MSLP_WRF: 1
 
+START: 2021 06 28 18 00 00
+END:   2021 06 28 21 00 00
+
+<<BeginFields>>
+air temperature
+atmospheric pressure
+wind velocity X
+wind velocity Y
+<<EndFields>>
 
 <end_file>

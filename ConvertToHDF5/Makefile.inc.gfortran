@@ -2,6 +2,7 @@ FC = gfortran
 
 CCFLAGS         = -w -fallow-argument-mismatch -O2 \
                   -fconvert=little-endian -ffree-line-length-none \
+                  -ffpe-summary=none \
                   -D_LAGRANGIAN_GLOBAL_ -D_USE_NIX -D_STACK_LIMITS_ -D_USE_PROJ4
 
 OBJ_CCFLAGS     = $(CCFLAGS) -I/usr/local/include -I./include
