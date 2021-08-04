@@ -4,7 +4,7 @@ version: "3.3"
 
 services:
 
-  # using system libraries (doesn't work because it enforces argument matching)
+  # using system libraries
   system:
     build:
       context: .
@@ -15,9 +15,21 @@ services:
       - $MYREPOS/Mohid:/tmp/Mohid
       - $MYREPOS/docker-mohid:/tmp/docker-mohid
 
+  # trying to statically compile the  libraries
+  # didn't work, lots of broken libcurl.a stuff
+  static0:
+    build:
+      context: .
+      dockerfile: Dockerfile.static0
+    tty: True
+    user: $UID:$GID:$USER
+    volumes:
+      - $MYREPOS/Mohid:/tmp/Mohid
+      - $MYREPOS/docker-mohid:/tmp/docker-mohid
+
   # statically compile only the specific libraries (hdf5, netcdf, fproj)
   # that need recompiling with -w -fallow-argument-mismatch -O2
-  static:
+  static1:
     build:
       context: .
       dockerfile: Dockerfile.static1
@@ -28,6 +40,7 @@ services:
       - $MYREPOS/docker-mohid:/tmp/docker-mohid
 
   # dynamic compile everything
+
   dynamic:
     build:
       context: .
