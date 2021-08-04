@@ -1,0 +1,60 @@
+FROM ubuntu:20.10
+LABEL maintainer="rosatrancoso@gmail.com"
+
+RUN apt-get update && apt-get install -y \
+    g++ gfortran git \
+    make cmake \
+    m4 \
+    vim \
+    wget \
+    zlib1g-dev
+
+
+#######################
+### Installing libs ###
+#######################
+
+
+ENV FCFLAGS="-w -fallow-argument-mismatch -O2" FFLAGS="-w -fallow-argument-mismatch -O2"
+
+# Adding each library separately otherwise will compile from here every time there is a change in the folder
+
+ADD libs/hdf5-1.8.22.tar.gz /tmp/libs/
+RUN echo "Installing hdf5..." &&\
+    cd /tmp/libs/hdf5-1.8.22 &&\
+    ./configure --prefix=/usr/local --enable-fortran --enable-fortran2003 --enable-cxx --enable-hl --disable-dap --disable-shared &&\
+    make &&\
+    make install &&\
+    h5fc -show
+
+ADD libs/netcdf-c-4.8.0.tar.gz /tmp/libs/
+RUN echo "Installing netcdf-c..." &&\
+    cd /tmp/libs/netcdf-c-4.8.0 &&\
+    ./configure --disable-dap --disable-shared --enable-static --disable-v2 &&\
+    make &&\
+    make install
+
+
+ADD libs/netcdf-fortran-4.5.3.tar.gz /tmp/libs/
+ENV LDFLAGS="-L/usr/local/lib"  CPPFLAGS="-I/usr/local/include"
+RUN echo "Installing netcdf-fortran..." &&\
+    export LIBS="$(nc-config --libs)" &&\
+    echo "$LIBS" &&\
+    cd /tmp/libs/netcdf-fortran-4.5.3 &&\
+    ./configure --disable-dap --disable-shared --enable-static --disable-v2 &&\
+    make &&\
+    make install &&\
+    nc-config --all
+
+
+RUN apt-get install -y libproj-dev
+ADD libs/fortran-proj-v1.0.1.tar.gz /tmp/libs/
+RUN echo "Installing fortran-proj..." &&\
+    cd /tmp/libs/fortran-proj-v1.0.1 &&\
+    sed -i 's/SHARED/STATIC/g' CMakeLists.txt &&\
+    sed -i 's/shared/static/g' CMakeLists.txt &&\
+    mkdir build && cd build &&\
+    cmake .. &&\
+    make  &&\
+    make install
+
