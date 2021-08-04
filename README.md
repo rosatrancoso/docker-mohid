@@ -18,14 +18,7 @@ Need to compile hdf5 and netcdf with:
 ENV FCFLAGS="-w -fallow-argument-mismatch -O2" FFLAGS="-w -fallow-argument-mismatch -O2"
 ```
 
-
-### Dockerfile.static0
-
-Trying to statically compile all libraries
-Didn't work, lots of broken `libcurl.a` dependencies.
-
-
-### Dockerfile.static1 - WORKED!
+### Dockerfile.static - WORKED!
 
 Statically compile only the specific libraries :
     - hdf5, netcdf-c and netcdf-fortran with `-w -fallow-argument-mismatch -O2`
